@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  build:
+    name: build-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Build (workspace)
+        run: cargo build --release --workspace
+      - name: Test (workspace)
+        run: cargo test --workspace
+      - name: Self-test parity matrix
+        run: cargo run --release --bin lancer-agentic-radar-cli -- self-test

@@ -1,0 +1,50 @@
+{
+  "name": "AI Support Workflow",
+  "nodes": [
+    {
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "parameters": { "path": "support", "authentication": "none" }
+    },
+    {
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "parameters": {}
+    },
+    {
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "parameters": { "systemMessage": "You are a support agent. {{$json.input}}" }
+    },
+    {
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "parameters": { "url": "={{$json.url}}", "method": "GET" }
+    },
+    {
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "parameters": { "jsCode": "return eval(items[0].json.expr)" }
+    },
+    {
+      "name": "Pinecone",
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "parameters": {}
+    },
+    {
+      "name": "Window Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "AI Agent", "type": "main", "index": 0 }]] },
+    "Chat Trigger": { "main": [[{ "node": "AI Agent", "type": "main", "index": 0 }]] },
+    "AI Agent": {
+      "main": [[{ "node": "HTTP Request" }, { "node": "Code" }]],
+      "ai_tool": [[{ "node": "HTTP Request" }]],
+      "ai_memory": [[{ "node": "Window Memory" }]],
+      "ai_vectorStore": [[{ "node": "Pinecone" }]]
+    }
+  }
+}

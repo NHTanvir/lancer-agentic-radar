@@ -1,0 +1,9 @@
+{
+  "model": "claude-3-5-sonnet",
+  "system": "You operate a computer to accomplish tasks for the user.",
+  "tools": [
+    { "type": "computer_20250124", "name": "computer", "display_width_px": 1280, "display_height_px": 800 },
+    { "type": "bash_20250124", "name": "bash" },
+    { "type": "text_editor_20250124", "name": "str_replace_editor" }
+  ]
+}

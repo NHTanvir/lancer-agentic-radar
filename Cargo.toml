@@ -1,21 +1,84 @@
-[package]
-name = "lancer-agentic-radar"
+# lancer-agentic-radar — Cargo workspace
+# Rust clone of splx-ai/agentic-radar (Apache-2.0) with a native egui GUI.
+# See plan.md (local, gitignored) for the full spec.
+
+[workspace]
+resolver = "2"
+members = [
+    "lancer-agentic-radar",
+    "ar-core",
+    "ar-parsers",
+    "ar-detectors",
+    "ar-runtime",
+    "ar-report",
+    "ar-hardening",
+]
+
+[workspace.package]
 version = "0.1.0"
 edition = "2021"
-description = "Rust clone of agentic-radar — part of the Lancer bug bounty toolkit"
-authors = ["NHTanvir <naymulhasantanvir10@gmail.com>"]
 license = "MIT"
+authors = ["NHTanvir <naymulhasantanvir10@gmail.com>"]
 repository = "https://github.com/NHTanvir/lancer-agentic-radar"
+rust-version = "1.75"
 
-[dependencies]
-clap = { version = "4", features = ["derive"] }
-tokio = { version = "1", features = ["full"] }
+# ---------------------------------------------------------------------------
+# Central dependency pins. Every crate references these via `dep.workspace =
+# true`, so the whole tree stays version-aligned (this matters most for the
+# egui family, which must move in lockstep).
+# ---------------------------------------------------------------------------
+[workspace.dependencies]
+# internal crates
+ar-core = { path = "ar-core" }
+ar-parsers = { path = "ar-parsers" }
+ar-detectors = { path = "ar-detectors" }
+ar-runtime = { path = "ar-runtime" }
+ar-report = { path = "ar-report" }
+ar-hardening = { path = "ar-hardening" }
+
+# serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+toml = "0.8"
+
+# graph / hashing / regex
+petgraph = "0.6"
+sha2 = "0.10"
+regex = "1"
+walkdir = "2"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+
+# errors / logging
+thiserror = "1"
 anyhow = "1"
 tracing = "0.1"
-tracing-subscriber = "0.3"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# cli
+clap = { version = "4", features = ["derive"] }
+
+# async / net (dynamic probe, MCP, hardening LLM calls, GUI HTTP server)
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json"] }
+futures = "0.3"
+crossbeam-channel = "0.5"
+
+# GUI — egui family pinned to one version so eframe/egui/extras/plot agree
+eframe = "0.27"
+egui = "0.27"
+egui_extras = "0.27"
+egui_plot = "0.27"
+rfd = "0.14"
+directories = "5"
+arboard = "3"
+image = { version = "0.24", default-features = false, features = ["png"] }
 
 [profile.release]
 opt-level = 3
 lto = true
 codegen-units = 1
 strip = true
+
+[profile.dev]
+opt-level = 0

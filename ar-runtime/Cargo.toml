@@ -1,0 +1,19 @@
+[package]
+name = "ar-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Dynamic probe / test runner for lancer-agentic-radar — replays attack prompts against live agent endpoints and MCP servers."
+
+[dependencies]
+ar-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+reqwest.workspace = true
+futures.workspace = true
+regex.workspace = true
+thiserror.workspace = true
+tracing.workspace = true

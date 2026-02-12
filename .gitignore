@@ -5,6 +5,17 @@ plan.md
 target/
 build/
 dist/
+Cargo.lock.bak
+
+# Workflow orchestration scripts (local-only)
+.workflows/
+
+# Runtime artifacts
+*.port
+*-report.json
+*-report.sarif
+*-report.md
+*-report.html
 
 # OS / editor
 .DS_Store

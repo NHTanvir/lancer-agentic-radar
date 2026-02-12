@@ -1,0 +1,40 @@
+name: agentic-radar-scan
+
+# Static security scan of agentic AI workflows, uploaded to GitHub code scanning.
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build scanner
+        run: cargo build --release --bin lancer-agentic-radar-cli
+
+      - name: Scan repository → SARIF
+        run: |
+          ./target/release/lancer-agentic-radar-cli scan . \
+            --report-format sarif \
+            -o agentic-radar.sarif \
+            --compliance-mode owasp-agentic-top10-2026,owasp-llm-top10-2025 \
+            --fail-on critical || echo "findings present (continuing to upload SARIF)"
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: agentic-radar.sarif
+          category: lancer-agentic-radar

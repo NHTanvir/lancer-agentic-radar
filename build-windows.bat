@@ -1,21 +1,27 @@
 @echo off
-REM Windows release build for lancer-agentic-radar.
-REM Output: dist$PKG-windows-x86_64\bin$PKG.exe
+setlocal enabledelayedexpansion
+REM ============================================================
+REM  build-windows.bat -- packaged Windows release build
+REM  Output: dist\lancer-agentic-radar-windows-x86_64\
+REM ============================================================
 
-echo === Building lancer-agentic-radar (release) for Windows x86_64 ===
+set "PKG=lancer-agentic-radar"
+set "DIST=dist\%PKG%-windows-x86_64"
+
+echo === Building %PKG% (release) for Windows x86_64 ===
 cargo build --release
 if errorlevel 1 exit /b 1
 
 echo === Packaging ===
-set DIST=dist$PKG-windows-x86_64
 if exist "%DIST%" rmdir /s /q "%DIST%"
 mkdir "%DIST%"
 mkdir "%DIST%\bin"
 
-copy target\release$PKG.exe "%DIST%\bin\" >/dev/null
-copy LICENSE "%DIST%\" >/dev/null 2>/dev/null
-copy README.md "%DIST%\" >/dev/null 2>/dev/null
+copy /Y "target\release\%PKG%.exe" "%DIST%\bin\" >nul
+copy /Y "target\release\%PKG%-cli.exe" "%DIST%\bin\" >nul 2>nul
+copy /Y "LICENSE" "%DIST%\" >nul 2>nul
+copy /Y "README.md" "%DIST%\" >nul 2>nul
 
-echo === Done. Binary: %DIST%\bin ===
+echo === Done. Binaries in %DIST%\bin ===
 dir "%DIST%\bin"
 exit /b 0
