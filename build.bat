@@ -26,7 +26,7 @@ echo  Output : %BUILD%\%BIN%
 echo.
 
 REM Locate cargo
-where cargo >/dev/null 2>&1
+where cargo >nul 2>nul
 if errorlevel 1 (
     set "CARGO=%USERPROFILE%\.cargo\bin\cargo.exe"
     if not exist "!CARGO!" (
@@ -49,12 +49,14 @@ if errorlevel 1 (
 
 echo  [2/2]  Copying to build\...
 if not exist "%BUILD%" mkdir "%BUILD%"
-copy /Y "%REPO%\target\release\%BIN%" "%BUILD%\" >/dev/null
+copy /Y "%REPO%\target\release\%BIN%" "%BUILD%\" >nul
 if errorlevel 1 (
     echo  ERROR: %BIN% not found in target\release
     pause
     exit /b 1
 )
+REM Companion headless CLI binary (best-effort copy).
+copy /Y "%REPO%\target\release\lancer-agentic-radar-cli.exe" "%BUILD%\" >nul 2>nul
 
 echo.
 echo  ================================================

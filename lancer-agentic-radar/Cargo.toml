@@ -1,0 +1,52 @@
+[package]
+name = "lancer-agentic-radar"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Security scanner for agentic AI workflows — Rust clone of agentic-radar with a native GUI. Part of the Lancer toolkit."
+default-run = "lancer-agentic-radar"
+# Only the explicitly-declared [[bin]] targets below — don't also auto-discover
+# src/bin/cli.rs as a second bin named "cli".
+autobins = false
+
+[[bin]]
+name = "lancer-agentic-radar"
+path = "src/main.rs"
+
+# Headless / scripting companion binary — always drops straight into the CLI
+# surface (equivalent to `lancer-agentic-radar --cli`).
+[[bin]]
+name = "lancer-agentic-radar-cli"
+path = "src/bin/cli.rs"
+
+[dependencies]
+ar-core.workspace = true
+ar-parsers.workspace = true
+ar-detectors.workspace = true
+ar-runtime.workspace = true
+ar-report.workspace = true
+ar-hardening.workspace = true
+
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+toml.workspace = true
+chrono.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+tokio.workspace = true
+crossbeam-channel.workspace = true
+
+# GUI stack
+eframe.workspace = true
+egui.workspace = true
+egui_extras.workspace = true
+egui_plot.workspace = true
+rfd.workspace = true
+directories.workspace = true
+arboard.workspace = true
+image.workspace = true

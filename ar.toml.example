@@ -1,0 +1,22 @@
+# lancer-agentic-radar project configuration.
+# Copy to `ar.toml` in your scan root. CLI flags override these.
+
+# Severities that make `scan` exit non-zero (CI gate).
+fail_on = ["critical", "high"]
+
+# Compliance report sections to render.
+compliance_modes = ["owasp-agentic-top10-2026", "owasp-llm-top10-2025"]
+
+# Drop findings below this confidence (one of: low, medium, high). Optional.
+# min_confidence = "low"
+
+[trust]
+# Document-source prefixes treated as trusted / untrusted by the RAG detectors.
+trusted_sources = ["./docs/", "../shared/", "s3://internal-bucket/"]
+untrusted_sources = ["http://", "https://", "s3://user-uploads/", "wikipedia", "arxiv"]
+
+[detectors]
+# Detector ids or whole category ids to suppress.
+exclude = ["pi-template-variable-unescaped"]
+# If non-empty, ONLY these run.
+only = []

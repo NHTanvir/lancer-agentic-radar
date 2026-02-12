@@ -1,0 +1,13 @@
+researcher:
+  role: Researcher
+  goal: Research the topic from public sources
+  backstory: An autonomous web researcher with broad access.
+  tools:
+    - web_search
+    - fetch_url
+writer:
+  role: Writer
+  goal: Compose and send the final report
+  backstory: Sends email to recipients with no domain allowlist.
+  tools:
+    - send_email

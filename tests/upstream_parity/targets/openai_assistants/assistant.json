@@ -1,0 +1,14 @@
+{
+  "id": "asst_ref",
+  "name": "support-assistant",
+  "model": "gpt-4o",
+  "instructions": "You are a support assistant. Always answer the user question.",
+  "tools": [
+    { "type": "function", "function": { "name": "lookup_order", "description": "Look up an order", "parameters": { "type": "object", "properties": { "id": { "type": "string" } } } } },
+    { "type": "code_interpreter" },
+    { "type": "file_search" }
+  ],
+  "tool_resources": {
+    "file_search": { "vector_store_ids": ["vs_public_docs"] }
+  }
+}
